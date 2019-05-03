@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package api;
+
+service Journal {
+    rpc Publish(JournalRequest) returns (JournalResponse);
+    rpc UnPublish(JournalRequest) returns (JournalResponse);
+    rpc Approve(JournalRequest) returns (JournalResponse);
+}
+
+message JournalRequest {
+    int64 id = 1;
+}
+
+message JournalResponse {
+    string flag = 1;
+    string message = 2;
+}
+
+
