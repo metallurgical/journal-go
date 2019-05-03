@@ -5,7 +5,7 @@
 
 PROTO_PATH=api/proto
 PHP_PATH=api/php
-GO_PATH=api/go
+GO_PATH=api/golang
 
 all: init build
 	
@@ -15,15 +15,15 @@ init:
 build:
 	@echo "Build in progress.."
 	@echo "Build go proto file.."
-	if [ ! -d "api/go" ]; then \
-		echo "Directory api/go doesnt exist..."; \
-		echo "Create directory api/go.."; \
-		mkdir api/go; \
+	if [ ! -d "api/golang" ]; then \
+		echo "Directory api/golang doesnt exist..."; \
+		echo "Create directory api/golang.."; \
+		mkdir api/golang; \
 	else \
-		echo "Directory go already exist"; \
+		echo "Directory api/golang already exist"; \
 		echo "Continue build go proto file.."; \
 	fi;	
-	protoc -I $(PROTO_PATH) --go_out=plugins=grpc:$(GO_PATH) $(PROTO_PATH)/journal.proto
+	protoc -I $(PROTO_PATH) --go_out=plugins=grpc,import_path=golang:$(GO_PATH) $(PROTO_PATH)/journal.proto
 	@echo "Build PHP proto file.."
 	if [ ! -d "api/php" ]; then \
 		echo "Directory api/php doesnt exist..."; \
@@ -33,7 +33,7 @@ build:
 		echo "Directory api/php already exist"; \
 		echo "Continue build php proto file.."; \
 	fi;	
-	protoc -I $(PROTO_PATH) --php_out=plugins=grpc:$(PHP_PATH) $(PROTO_PATH)/journal.proto
+	protoc -I $(PROTO_PATH) --php_out=$(PHP_PATH) --grpc_out=$(PHP_PATH) --plugin=protoc-gen-grpc=/Users/metallurgical/temp/grpc/bins/opt/grpc_php_plugin $(PROTO_PATH)/journal.proto
 
 compile:
 	@echo "Compile code into executable file"

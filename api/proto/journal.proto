@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package api;
-
 service Journal {
     rpc Publish(JournalRequest) returns (JournalResponse);
     rpc UnPublish(JournalRequest) returns (JournalResponse);

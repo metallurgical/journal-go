@@ -1,4 +1,4 @@
-api/go/*
+api/golang/*
 api/php/*
 .idea
 
