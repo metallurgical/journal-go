@@ -17,8 +17,8 @@ message JournalCreateRequest {
     int64 id = 1;
     string title = 2;
     string overview = 3;
-    int64 journalCategoryId = 4;
-    int64 userId = 5;
+    uint64 journal_category_id = 4;
+    uint64 userId = 5;
 }
 
 message JournalApproveRequest {

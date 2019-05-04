@@ -10,14 +10,16 @@ import (
 )
 
 type Journal struct {
-	ID          uint `gorm:"primary_key"`
-	Title       string
-	Slug        string `gorm:"unique"`
-	Overview    string
-	Status      int32
-	PublishedAt time.Time
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	ID                uint `gorm:"primary_key"`
+	UserId            uint64
+	JournalCategoryId uint64
+	Title             string
+	Slug              string `gorm:"unique"`
+	Overview          string
+	Status            int32
+	PublishedAt       time.Time
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
 }
 
 // Get existing journal from database.
@@ -37,7 +39,9 @@ func (j *Journal) CreateJournal(s *server.JournalServer, req *pb.JournalCreateRe
 		Title:    req.Title,
 		Slug:     slug,
 		Overview: req.Overview,
-		Status:   0,
+		UserId: req.UserId,
+		JournalCategoryId: req.JournalCategoryId,
+		Status: 0,
 	}
 	if !s.DB.NewRecord(journal) {
 		return errors.New("Operation failed. Please try again.")
