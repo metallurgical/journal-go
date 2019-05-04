@@ -26,8 +26,9 @@ func (s *JournalServer) Publish(ctx context.Context, req *pb.JournalRequest) (*p
 	if journal.Status != 1 {
 		return nil, status.Errorf(codes.PermissionDenied, "Only approved journal that was able to publish")
 	}
+	dateNow := time.Now()
 	journal.Status = req.Status
-	journal.PublishedAt = time.Now()
+	journal.PublishedAt = &dateNow
 
 	if err := s.DB.Save(&journal).Error; err != nil {
 		return &pb.JournalResponse{
@@ -115,7 +116,7 @@ func (s *JournalServer) Destroy(ctx context.Context, req *pb.JournalRequest) (*p
 
 func (s *JournalServer) Create(ctx context.Context, req *pb.JournalCreateRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
-	if err := journal.CreateJournal(s, req); err != nil {
+	if err := journal.CreateJournal(s.DB, req); err != nil {
 		return &pb.JournalResponse{
 			Flag:    "error",
 			Message: err.Error(),

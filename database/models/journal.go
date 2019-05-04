@@ -5,7 +5,6 @@ import (
 	goslug "github.com/gosimple/slug"
 	"github.com/jinzhu/gorm"
 	pb "github.com/metallurgical/journal-go/api/golang"
-	"github.com/metallurgical/journal-go/server"
 	"time"
 )
 
@@ -17,9 +16,9 @@ type Journal struct {
 	Slug              string `gorm:"unique"`
 	Overview          string
 	Status            int32
-	PublishedAt       time.Time
+	PublishedAt       *time.Time
 	CreatedAt         time.Time
-	UpdatedAt         time.Time
+	UpdatedAt         *time.Time
 }
 
 // Get existing journal from database.
@@ -31,20 +30,21 @@ func (j *Journal) GetJournal(db gorm.DB, id int64) (error) {
 }
 
 // Create new journal resource.
-func (j *Journal) CreateJournal(s *server.JournalServer, req *pb.JournalCreateRequest) error {
+func (j *Journal) CreateJournal(db gorm.DB, req *pb.JournalCreateRequest) error {
 	var slug string
 
 	slug = goslug.Make(req.Title)
 	journal := &Journal{
-		Title:    req.Title,
-		Slug:     slug,
-		Overview: req.Overview,
-		UserId: req.UserId,
+		Title:             req.Title,
+		Slug:              slug,
+		Overview:          req.Overview,
+		UserId:            req.UserId,
 		JournalCategoryId: req.JournalCategoryId,
-		Status: 0,
+		Status:            0,
 	}
-	if !s.DB.NewRecord(journal) {
+	if !db.NewRecord(journal) {
 		return errors.New("Operation failed. Please try again.")
 	}
+	db.Create(&journal)
 	return nil
 }
