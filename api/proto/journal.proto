@@ -4,6 +4,7 @@ service Journal {
     rpc Publish(JournalRequest) returns (JournalResponse);
     rpc UnPublish(JournalRequest) returns (JournalResponse);
     rpc Approve(JournalApproveRequest) returns (JournalResponse);
+    rpc Destroy(JournalRequest) returns (JournalResponse);
 }
 
 message JournalRequest {

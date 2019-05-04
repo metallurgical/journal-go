@@ -75,3 +75,17 @@ func (s *JournalServer) Approve(ctx context.Context, req *pb.JournalApproveReque
 
 	return &pb.JournalResponse{Flag: "success", Message: "success"}, nil
 }
+
+// Delete journal.
+func (s *JournalServer) Destroy(ctx context.Context, req *pb.JournalRequest) (*pb.JournalResponse, error) {
+	journal := &journal.Journal{}
+	if err := journal.GetJournal(s.DB, req.Id); err != nil {
+		return &pb.JournalResponse{Flag: "error", Message: "Resource not found. Please try again"}, nil
+	}
+
+	if err := s.DB.Delete(&journal).Error; err != nil {
+		return &pb.JournalResponse{Flag: "error", Message: "Operation failed, please try again"}, nil
+	}
+
+	return &pb.JournalResponse{Flag: "success", Message: "success"}, nil
+}
