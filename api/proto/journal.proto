@@ -3,11 +3,17 @@ syntax = "proto3";
 service Journal {
     rpc Publish(JournalRequest) returns (JournalResponse);
     rpc UnPublish(JournalRequest) returns (JournalResponse);
-    rpc Approve(JournalRequest) returns (JournalResponse);
+    rpc Approve(JournalApproveRequest) returns (JournalResponse);
 }
 
 message JournalRequest {
     int64 id = 1;
+}
+
+message JournalApproveRequest {
+    int64 id = 1;
+    int64 approved_by = 2;
+    int32 status = 3;
 }
 
 message JournalResponse {
