@@ -1,4 +1,5 @@
 api/golang/*
 api/php/*
 .idea
+.env
 

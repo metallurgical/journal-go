@@ -1,15 +1,24 @@
 syntax = "proto3";
 
 service Journal {
-    rpc Publish(JournalRequest) returns (JournalResponse);
-    rpc UnPublish(JournalRequest) returns (JournalResponse);
-    rpc Approve(JournalApproveRequest) returns (JournalResponse);
-    rpc Destroy(JournalRequest) returns (JournalResponse);
+    rpc Publish (JournalRequest) returns (JournalResponse);
+    rpc UnPublish (JournalRequest) returns (JournalResponse);
+    rpc Approve (JournalApproveRequest) returns (JournalResponse);
+    rpc Destroy (JournalRequest) returns (JournalResponse);
+    rpc Create (JournalCreateRequest) returns (JournalResponse);
 }
 
 message JournalRequest {
     int64 id = 1;
     int32 status = 2;
+}
+
+message JournalCreateRequest {
+    int64 id = 1;
+    string title = 2;
+    string overview = 3;
+    int64 journalCategoryId = 4;
+    int64 userId = 5;
 }
 
 message JournalApproveRequest {

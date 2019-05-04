@@ -6,9 +6,8 @@ import (
 	pb "github.com/metallurgical/journal-go/api/golang"
 	journal "github.com/metallurgical/journal-go/database/models"
 	"google.golang.org/grpc/codes"
-	_ "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	_ "google.golang.org/grpc/status"
+	"time"
 )
 
 type JournalServer struct {
@@ -27,12 +26,20 @@ func (s *JournalServer) Publish(ctx context.Context, req *pb.JournalRequest) (*p
 	if journal.Status != 1 {
 		return nil, status.Errorf(codes.PermissionDenied, "Only approved journal that was able to publish")
 	}
-	journal.Status = req.Status;
+	journal.Status = req.Status
+	journal.PublishedAt = time.Now()
+
 	if err := s.DB.Save(&journal).Error; err != nil {
-		return &pb.JournalResponse{Flag: "error", Message: "Operation failed, please try again"}, nil
+		return &pb.JournalResponse{
+			Flag:    "error",
+			Message: "Operation failed, please try again",
+		}, nil
 	}
 
-	return &pb.JournalResponse{Flag: "success", Message: "success"}, nil
+	return &pb.JournalResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
 }
 
 // Un-publish published journal.
@@ -49,10 +56,16 @@ func (s *JournalServer) UnPublish(ctx context.Context, req *pb.JournalRequest) (
 	}
 	journal.Status = req.Status;
 	if err := s.DB.Save(&journal).Error; err != nil {
-		return &pb.JournalResponse{Flag: "error", Message: "Operation failed, please try again"}, nil
+		return &pb.JournalResponse{
+			Flag:    "error",
+			Message: "Operation failed, please try again",
+		}, nil
 	}
 
-	return &pb.JournalResponse{Flag: "success", Message: "success"}, nil
+	return &pb.JournalResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
 }
 
 // Approve pending journal.
@@ -68,24 +81,49 @@ func (s *JournalServer) Approve(ctx context.Context, req *pb.JournalApproveReque
 		return nil, status.Errorf(codes.PermissionDenied, "Only pending journal that was able to approved.")
 	}
 	journal.Status = req.Status;
-
 	if err := s.DB.Save(&journal).Error; err != nil {
-		return &pb.JournalResponse{Flag: "error", Message: "Operation failed, please try again"}, nil
+		return &pb.JournalResponse{
+			Flag:    "error",
+			Message: "Operation failed, please try again",
+		}, nil
 	}
 
-	return &pb.JournalResponse{Flag: "success", Message: "success"}, nil
+	return &pb.JournalResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
 }
 
 // Delete journal.
 func (s *JournalServer) Destroy(ctx context.Context, req *pb.JournalRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
 	if err := journal.GetJournal(s.DB, req.Id); err != nil {
-		return &pb.JournalResponse{Flag: "error", Message: "Resource not found. Please try again"}, nil
+		return &pb.JournalResponse{
+			Flag:    "error",
+			Message: "Resource not found. Please try again"}, nil
 	}
 
 	if err := s.DB.Delete(&journal).Error; err != nil {
 		return &pb.JournalResponse{Flag: "error", Message: "Operation failed, please try again"}, nil
 	}
 
-	return &pb.JournalResponse{Flag: "success", Message: "success"}, nil
+	return &pb.JournalResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
+}
+
+func (s *JournalServer) Create(ctx context.Context, req *pb.JournalCreateRequest) (*pb.JournalResponse, error) {
+	journal := &journal.Journal{}
+	if err := journal.CreateJournal(s, req); err != nil {
+		return &pb.JournalResponse{
+			Flag:    "error",
+			Message: err.Error(),
+		}, nil
+	}
+
+	return &pb.JournalResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
 }
