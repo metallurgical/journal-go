@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"github.com/jinzhu/gorm"
 	pb "github.com/metallurgical/journal-go/api/golang"
 	journal "github.com/metallurgical/journal-go/database/models"
@@ -8,13 +9,13 @@ import (
 	_ "google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	_ "google.golang.org/grpc/status"
-	"context"
 )
 
 type JournalServer struct {
 	DB gorm.DB
 }
 
+// Publish approved journal.
 func (s *JournalServer) Publish(ctx context.Context, req *pb.JournalRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
 	if err := journal.GetJournal(s.DB, req.Id); err != nil {
@@ -34,6 +35,7 @@ func (s *JournalServer) Publish(ctx context.Context, req *pb.JournalRequest) (*p
 	return &pb.JournalResponse{Flag: "success", Message: "success"}, nil
 }
 
+// Un-publish published journal.
 func (s *JournalServer) UnPublish(ctx context.Context, req *pb.JournalRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
 	if err := journal.GetJournal(s.DB, req.Id); err != nil {
@@ -53,6 +55,7 @@ func (s *JournalServer) UnPublish(ctx context.Context, req *pb.JournalRequest) (
 	return &pb.JournalResponse{Flag: "success", Message: "success"}, nil
 }
 
+// Approve pending journal.
 func (s *JournalServer) Approve(ctx context.Context, req *pb.JournalApproveRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
 	if err := journal.GetJournal(s.DB, req.Id); err != nil {
