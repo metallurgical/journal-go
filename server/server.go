@@ -117,13 +117,14 @@ func (s *JournalServer) Destroy(ctx context.Context, req *pb.JournalRequest) (*p
 
 func (s *JournalServer) Create(ctx context.Context, req *pb.JournalCreateRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
-	if err := journal.CreateJournal(s.DB, req); err != nil {
+	createdJournal, err := journal.CreateJournal(s.DB, req);
+	if err != nil {
 		return &pb.JournalResponse{
 			Flag:    "error",
 			Message: err.Error(),
 		}, nil
 	}
-	resp, err := json.Marshal(&journal)
+	resp, err := json.Marshal(&createdJournal)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "Operation failed, please try again")
 	}

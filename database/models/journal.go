@@ -37,7 +37,7 @@ func (j *Journal) GetJournal(db gorm.DB, id int64) (error) {
 }
 
 // Create new journal resource.
-func (j *Journal) CreateJournal(db gorm.DB, req *pb.JournalCreateRequest) error {
+func (j *Journal) CreateJournal(db gorm.DB, req *pb.JournalCreateRequest) (interface{}, error) {
 	var originalSlug, slug string
 	var count = 0
 
@@ -64,11 +64,11 @@ func (j *Journal) CreateJournal(db gorm.DB, req *pb.JournalCreateRequest) error 
 		Status:            0,
 	}
 	if !db.NewRecord(&journal) {
-		return errors.New("Operation failed. Please try again.")
+		return nil, errors.New("Operation failed. Please try again.")
 	}
 	db.Create(&journal)
 
-	return nil
+	return journal, nil
 }
 
 // Generate random string.
