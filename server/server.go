@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/jinzhu/gorm"
 	pb "github.com/metallurgical/journal-go/api/golang"
 	journal "github.com/metallurgical/journal-go/database/models"
@@ -122,9 +123,14 @@ func (s *JournalServer) Create(ctx context.Context, req *pb.JournalCreateRequest
 			Message: err.Error(),
 		}, nil
 	}
+	resp, err := json.Marshal(&journal)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Operation failed, please try again")
+	}
 
 	return &pb.JournalResponse{
 		Flag:    "success",
 		Message: "success",
+		Journal: string(resp),
 	}, nil
 }

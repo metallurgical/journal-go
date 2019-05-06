@@ -30,6 +30,7 @@ message JournalApproveRequest {
 message JournalResponse {
     string flag = 1;
     string message = 2;
+    string Journal = 3;
 }
 
 

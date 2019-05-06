@@ -63,7 +63,7 @@ func (j *Journal) CreateJournal(db gorm.DB, req *pb.JournalCreateRequest) error 
 		JournalCategoryId: req.JournalCategoryId,
 		Status:            0,
 	}
-	if !db.NewRecord(journal) {
+	if !db.NewRecord(&journal) {
 		return errors.New("Operation failed. Please try again.")
 	}
 	db.Create(&journal)
