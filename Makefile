@@ -53,7 +53,7 @@ compile:
 	go build
 
 install:
-	@echo "Compile and install souce code
+	@echo "Compile and install souce code"
 	go install
 
 clean:
