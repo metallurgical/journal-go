@@ -115,6 +115,7 @@ func (s *JournalServer) Destroy(ctx context.Context, req *pb.JournalRequest) (*p
 	}, nil
 }
 
+// Create Journal.
 func (s *JournalServer) Create(ctx context.Context, req *pb.JournalCreateRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
 	createdJournal, err := journal.CreateJournal(s.DB, req);
@@ -125,6 +126,28 @@ func (s *JournalServer) Create(ctx context.Context, req *pb.JournalCreateRequest
 		}, nil
 	}
 	resp, err := json.Marshal(&createdJournal)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Operation failed, please try again")
+	}
+
+	return &pb.JournalResponse{
+		Flag:    "success",
+		Message: "success",
+		Journal: string(resp),
+	}, nil
+}
+
+// Edit Journal.
+func (s *JournalServer) Edit(ctx context.Context, req *pb.JournalEditRequest) (*pb.JournalResponse, error) {
+	journal := &journal.Journal{}
+	editedJournal, err := journal.Edit(s.DB, req)
+	if err != nil {
+		return &pb.JournalResponse{
+			Flag:    "error",
+			Message: err.Error(),
+		}, nil
+	}
+	resp, err := json.Marshal(&editedJournal)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "Operation failed, please try again")
 	}
