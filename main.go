@@ -10,6 +10,8 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"flag"
+	"go/build"
 )
 
 func main() {
@@ -17,17 +19,23 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
-
-	if err := godotenv.Load(); err != nil {
+	env  := flag.String("env", "", "Replace default .env path")
+	flag.Parse()
+	envPath := ""
+	if *env == "" {
+		envPath = fmt.Sprintf("%s/src/github.com/metallurgical/journal-go/.env", build.Default.GOPATH)
+	} else {
+		envPath = *env
+	}
+	if err := godotenv.Load(envPath); err != nil {
 		log.Fatalf("Error loading .env file")
 	}
 	grpcServer := grpc.NewServer()
 	dbConn, err := mysqlDB.Connect()
-	if err := godotenv.Load(); err != nil {
+	if err != nil {
 		log.Fatalf("Error connecting to database. Please check database crendetials.")
 	}
 	pb.RegisterJournalServer(grpcServer, &svr.JournalServer{DB: dbConn})
-
 
 	grpcServer.Serve(conn)
 }

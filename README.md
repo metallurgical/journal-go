@@ -7,7 +7,8 @@ Copy from example. `cp .env.example .env`
 ## Setup
 ```bash
 $ go get github.com/metallurgical/journal-go
-$ make # to build services files
+$ make # to build services files -> use in server
+$ make build-local # same as above, use in local
 $ make compile # to compile code into executable file
 $ make clean # clean all generated files and executable file 
 ```
