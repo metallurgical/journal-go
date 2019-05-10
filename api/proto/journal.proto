@@ -8,6 +8,7 @@ service Journal {
     rpc Approve (JournalApproveRequest) returns (JournalResponse);
     rpc Destroy (JournalRequest) returns (JournalResponse);
     rpc Create (JournalCreateRequest) returns (JournalResponse);
+    rpc Edit (JournalEditRequest) returns (JournalResponse);
 }
 
 message JournalRequest {
@@ -21,6 +22,13 @@ message JournalCreateRequest {
     string overview = 3;
     uint64 journal_category_id = 4;
     uint64 user_id = 5;
+}
+
+message JournalEditRequest {
+    int64 id = 1;
+    string title = 2;
+    string overview = 3;
+    uint64 journal_category_id = 4;
 }
 
 message JournalApproveRequest {

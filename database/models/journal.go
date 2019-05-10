@@ -71,6 +71,17 @@ func (j *Journal) CreateJournal(db gorm.DB, req *pb.JournalCreateRequest) (inter
 	return journal, nil
 }
 
+// Edit existing journal resource.
+func (j *Journal) Edit(db gorm.DB, req *pb.JournalEditRequest) (interface{}, error) {
+	db.First(&j, req.Id)
+	db.Model(&j).Updates(Journal{
+		Title: req.Title,
+		Overview: req.Overview,
+		JournalCategoryId: req.JournalCategoryId,
+	})
+	return j, nil
+}
+
 // Generate random string.
 func randToken(length int, strSlug chan<- string) {
 	randomBytes := make([]byte, 32)
