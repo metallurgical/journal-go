@@ -36,6 +36,7 @@ func main() {
 		log.Fatalf("Error connecting to database. Please check database crendetials.")
 	}
 	pb.RegisterJournalServer(grpcServer, &svr.JournalServer{DB: dbConn})
+	pb.RegisterRevisionServer(grpcServer, &svr.RevisionServer{DB: dbConn})
 
 	grpcServer.Serve(conn)
 }

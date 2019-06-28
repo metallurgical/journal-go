@@ -8,9 +8,9 @@
 PROTO_PATH=api/proto
 PHP_PATH=api/php
 GO_PATH=api/golang
-PHP_PLUGIN_GRPC_LOCAL=$(PROTO_PATH) --php_out=$(PHP_PATH) --grpc_out=$(PHP_PATH) --plugin=protoc-gen-grpc=/Users/metallurgical/temp/grpc/bins/opt/grpc_php_plugin $(PROTO_PATH)/journal.proto
-PHP_PLUGIN_GRPC_STAGING=$(PROTO_PATH) --php_out=$(PHP_PATH) --grpc_out=$(PHP_PATH) --plugin=protoc-gen-grpc=/home/metallurgical/temp/grpc/bins/opt/grpc_php_plugin $(PROTO_PATH)/journal.proto
-PHP_PLUGIN_GRPC_PROD=$(PROTO_PATH) --php_out=$(PHP_PATH) --grpc_out=$(PHP_PATH) --plugin=protoc-gen-grpc=/tmp/grpc/bins/opt/grpc_php_plugin $(PROTO_PATH)/journal.proto
+PHP_PLUGIN_GRPC_LOCAL=$(PROTO_PATH) --php_out=$(PHP_PATH) --grpc_out=$(PHP_PATH) --plugin=protoc-gen-grpc=/Users/metallurgical/temp/grpc/bins/opt/grpc_php_plugin $(wildcard $(PROTO_PATH)/*.proto)
+PHP_PLUGIN_GRPC_STAGING=$(PROTO_PATH) --php_out=$(PHP_PATH) --grpc_out=$(PHP_PATH) --plugin=protoc-gen-grpc=/home/metallurgical/temp/grpc/bins/opt/grpc_php_plugin $(wildcard $(PROTO_PATH)/*.proto)
+PHP_PLUGIN_GRPC_PROD=$(PROTO_PATH) --php_out=$(PHP_PATH) --grpc_out=$(PHP_PATH) --plugin=protoc-gen-grpc=/tmp/grpc/bins/opt/grpc_php_plugin $(wildcard $(PROTO_PATH)/*.proto)
 
 all: init build
 	
@@ -28,7 +28,7 @@ build-default:
 		echo "Directory api/golang already exist"; \
 		echo "Continue build go proto file.."; \
 	fi;
-	protoc -I $(PROTO_PATH) --go_out=plugins=grpc,import_path=golang:$(GO_PATH) $(PROTO_PATH)/journal.proto
+	protoc -I $(PROTO_PATH) --go_out=plugins=grpc,import_path=golang:$(GO_PATH) $(wildcard $(PROTO_PATH)/*.proto)
 	@echo "Build PHP proto file.."
 	if [ ! -d "api/php" ]; then \
 		echo "Directory api/php doesnt exist..."; \

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package RevisionClientInterface;
+
+service Revision {
+    rpc Create(RevisionRequest) returns (RevisionResponse);
+}
+
+message RevisionRequest {
+    int64 journal_id = 1;
+    string name = 2;
+    string remarks = 3;
+}
+
+message RevisionResponse {
+    string flag = 1;
+    string message = 2;
+    string Revision = 3;
+}

@@ -1,5 +1,4 @@
 api/golang/*
-api/php/*
 .idea
 .env
 journal-go

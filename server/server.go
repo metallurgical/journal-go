@@ -15,6 +15,10 @@ type JournalServer struct {
 	DB gorm.DB
 }
 
+type RevisionServer struct {
+	DB gorm.DB
+}
+
 // Publish approved journal.
 func (s *JournalServer) Publish(ctx context.Context, req *pb.JournalRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
@@ -156,5 +160,27 @@ func (s *JournalServer) Edit(ctx context.Context, req *pb.JournalEditRequest) (*
 		Flag:    "success",
 		Message: "success",
 		Journal: string(resp),
+	}, nil
+}
+
+// Create revision
+func (s *RevisionServer) Create(ctx context.Context, req *pb.RevisionRequest) (*pb.RevisionResponse, error) {
+	rev := journal.Revision{}
+	createdRev, err := rev.Create(s.DB, req)
+	if err != nil {
+		return &pb.RevisionResponse{
+			Flag:    "error",
+			Message: err.Error(),
+		}, nil
+	}
+	resp, err := json.Marshal(&createdRev)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Operation failed, please try again")
+	}
+
+	return &pb.RevisionResponse{
+		Flag:    "success",
+		Message: "success",
+		Revision: string(resp),
 	}, nil
 }

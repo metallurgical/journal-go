@@ -75,8 +75,8 @@ func (j *Journal) CreateJournal(db gorm.DB, req *pb.JournalCreateRequest) (inter
 func (j *Journal) Edit(db gorm.DB, req *pb.JournalEditRequest) (interface{}, error) {
 	db.First(&j, req.Id)
 	db.Model(&j).Updates(Journal{
-		Title: req.Title,
-		Overview: req.Overview,
+		Title:             req.Title,
+		Overview:          req.Overview,
 		JournalCategoryId: req.JournalCategoryId,
 	})
 	return j, nil
