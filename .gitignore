@@ -2,4 +2,5 @@ api/golang/*
 .idea
 .env
 journal-go
-
+tmp
+tmp/air_errors.log

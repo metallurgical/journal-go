@@ -19,6 +19,10 @@ type RevisionServer struct {
 	DB gorm.DB
 }
 
+type PublicationServer struct {
+	DB gorm.DB
+}
+
 // Publish approved journal.
 func (s *JournalServer) Publish(ctx context.Context, req *pb.JournalRequest) (*pb.JournalResponse, error) {
 	journal := &journal.Journal{}
@@ -183,4 +187,41 @@ func (s *RevisionServer) Create(ctx context.Context, req *pb.RevisionRequest) (*
 		Message: "success",
 		Revision: string(resp),
 	}, nil
+}
+
+// Create publication
+func (s *PublicationServer) Create(ctx context.Context, req *pb.PublicationRequest) (*pb.PublicationResponse, error) {
+	pub := journal.Publication{}
+	createdRev, err := pub.Create(s.DB, req)
+	if err != nil {
+		return &pb.PublicationResponse{
+			Flag:    "error",
+			Message: err.Error(),
+		}, nil
+	}
+	resp, err := json.Marshal(&createdRev)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Operation failed, please try again")
+	}
+
+	return &pb.PublicationResponse{
+		Flag:    "success",
+		Message: "success",
+		Publication: string(resp),
+	}, nil
+}
+
+// Update publication
+func (s *PublicationServer) Update(ctx context.Context, req *pb.PublicationRequest) (*pb.PublicationResponse, error) {
+	return nil, nil
+}
+
+// Delete publication
+func (s *PublicationServer) Delete(ctx context.Context, req *pb.PublicationRequest) (*pb.PublicationResponse, error) {
+	return nil, nil
+}
+
+// SetStatus change publication's status
+func (s *PublicationServer) SetStatus(ctx context.Context, req *pb.PublicationRequest) (*pb.PublicationResponse, error) {
+	return nil, nil
 }

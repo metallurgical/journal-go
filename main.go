@@ -37,6 +37,7 @@ func main() {
 	}
 	pb.RegisterJournalServer(grpcServer, &svr.JournalServer{DB: dbConn})
 	pb.RegisterRevisionServer(grpcServer, &svr.RevisionServer{DB: dbConn})
+	pb.RegisterPublicationServer(grpcServer, &svr.PublicationServer{DB: dbConn})
 
 	grpcServer.Serve(conn)
 }

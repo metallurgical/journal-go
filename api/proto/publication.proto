@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package PublicationClientInterface;
+
+service Publication {
+    rpc Create (PublicationRequest) returns (PublicationResponse);
+    rpc Update (PublicationRequest) returns (PublicationResponse);
+    rpc Delete (PublicationRequest) returns (PublicationResponse);
+    rpc SetStatus (PublicationRequest) returns (PublicationResponse);
+}
+
+message PublicationRequest {
+    string volume = 1;
+    int64 no = 2;
+    int64 created_by = 3;
+    string published_at = 4;
+    int32 status = 5;
+}
+
+message PublicationResponse {
+    string flag = 1;
+    string message = 2;
+    string Publication = 3;
+}
