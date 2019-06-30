@@ -235,10 +235,39 @@ func (s *PublicationServer) Update(ctx context.Context, req *pb.PublicationReque
 
 // Delete publication
 func (s *PublicationServer) Delete(ctx context.Context, req *pb.PublicationRequest) (*pb.PublicationResponse, error) {
-	return nil, nil
+	pub := &journal.Publication{}
+	if err := pub.Get(s.DB, req.Id); err != nil {
+		return &pb.PublicationResponse{
+			Flag:    "error",
+			Message: "Resource not found. Please try again"}, nil
+	}
+
+	if err := s.DB.Delete(&pub).Error; err != nil {
+		return &pb.PublicationResponse{Flag: "error", Message: "Operation failed, please try again"}, nil
+	}
+
+	return &pb.PublicationResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
 }
 
 // SetStatus change publication's status
 func (s *PublicationServer) SetStatus(ctx context.Context, req *pb.PublicationRequest) (*pb.PublicationResponse, error) {
-	return nil, nil
+	pub := &journal.Publication{}
+	if err := pub.Get(s.DB, req.Id); err != nil {
+		return &pb.PublicationResponse{Flag: "error", Message: "Resource not found. Please try again"}, nil
+	}
+	pub.Status = req.Status;
+	if err := s.DB.Save(&pub).Error; err != nil {
+		return &pb.PublicationResponse{
+			Flag:    "error",
+			Message: "Operation failed, please try again",
+		}, nil
+	}
+
+	return &pb.PublicationResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
 }
