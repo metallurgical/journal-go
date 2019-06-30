@@ -15,6 +15,7 @@ message PublicationRequest {
     int64 created_by = 3;
     string published_at = 4;
     int32 status = 5;
+    int64 id = 6;
 }
 
 message PublicationResponse {

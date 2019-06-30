@@ -183,8 +183,8 @@ func (s *RevisionServer) Create(ctx context.Context, req *pb.RevisionRequest) (*
 	}
 
 	return &pb.RevisionResponse{
-		Flag:    "success",
-		Message: "success",
+		Flag:     "success",
+		Message:  "success",
 		Revision: string(resp),
 	}, nil
 }
@@ -205,15 +205,32 @@ func (s *PublicationServer) Create(ctx context.Context, req *pb.PublicationReque
 	}
 
 	return &pb.PublicationResponse{
-		Flag:    "success",
-		Message: "success",
+		Flag:        "success",
+		Message:     "success",
 		Publication: string(resp),
 	}, nil
 }
 
 // Update publication
 func (s *PublicationServer) Update(ctx context.Context, req *pb.PublicationRequest) (*pb.PublicationResponse, error) {
-	return nil, nil
+	pub := &journal.Publication{}
+	editedPublication, err := pub.Update(s.DB, req)
+	if err != nil {
+		return &pb.PublicationResponse{
+			Flag:    "error",
+			Message: err.Error(),
+		}, nil
+	}
+	resp, err := json.Marshal(&editedPublication)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Operation failed, please try again")
+	}
+
+	return &pb.PublicationResponse{
+		Flag:    "success",
+		Message: "success",
+		Publication: string(resp),
+	}, nil
 }
 
 // Delete publication

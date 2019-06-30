@@ -33,6 +33,10 @@ class PublicationRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>int32 status = 5;</code>
      */
     private $status = 0;
+    /**
+     * Generated from protobuf field <code>int64 id = 6;</code>
+     */
+    private $id = 0;
 
     /**
      * Constructor.
@@ -45,6 +49,7 @@ class PublicationRequest extends \Google\Protobuf\Internal\Message
      *     @type int|string $created_by
      *     @type string $published_at
      *     @type int $status
+     *     @type int|string $id
      * }
      */
     public function __construct($data = NULL) {
@@ -158,6 +163,28 @@ class PublicationRequest extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkInt32($var);
         $this->status = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>int64 id = 6;</code>
+     * @return int|string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Generated from protobuf field <code>int64 id = 6;</code>
+     * @param int|string $var
+     * @return $this
+     */
+    public function setId($var)
+    {
+        GPBUtil::checkInt64($var);
+        $this->id = $var;
 
         return $this;
     }
