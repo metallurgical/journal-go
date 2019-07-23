@@ -9,6 +9,8 @@ service Journal {
     rpc Destroy (JournalRequest) returns (JournalResponse);
     rpc Create (JournalCreateRequest) returns (JournalResponse);
     rpc Edit (JournalEditRequest) returns (JournalResponse);
+    rpc Review (JournalRequest) returns (JournalResponse);
+    rpc Reject (JournalRequest) returns (JournalResponse);
 }
 
 message JournalRequest {

@@ -94,4 +94,30 @@ class JournalClient extends \Grpc\BaseStub {
         $metadata, $options);
     }
 
+    /**
+     * @param \JournalClientInterface\JournalRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function Review(\JournalClientInterface\JournalRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/JournalClientInterface.Journal/Review',
+        $argument,
+        ['\JournalClientInterface\JournalResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * @param \JournalClientInterface\JournalRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function Reject(\JournalClientInterface\JournalRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/JournalClientInterface.Journal/Reject',
+        $argument,
+        ['\JournalClientInterface\JournalResponse', 'decode'],
+        $metadata, $options);
+    }
+
 }

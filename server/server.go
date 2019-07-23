@@ -167,6 +167,52 @@ func (s *JournalServer) Edit(ctx context.Context, req *pb.JournalEditRequest) (*
 	}, nil
 }
 
+// Review journal.
+func (s *JournalServer) Review(ctx context.Context, req *pb.JournalRequest) (*pb.JournalResponse, error) {
+	journal := &journal.Journal{}
+	if err := journal.GetJournal(s.DB, req.Id); err != nil {
+		return &pb.JournalResponse{Flag: "error", Message: "Resource not found. Please try again"}, nil
+	}
+	if journal.Status == 4 {
+		return nil, status.Errorf(codes.PermissionDenied, "No action taken as journal already in-review.")
+	}
+	journal.Status = req.Status;
+	if err := s.DB.Save(&journal).Error; err != nil {
+		return &pb.JournalResponse{
+			Flag:    "error",
+			Message: "Operation failed, please try again",
+		}, nil
+	}
+
+	return &pb.JournalResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
+}
+
+// Reject journal.
+func (s *JournalServer) Reject(ctx context.Context, req *pb.JournalRequest) (*pb.JournalResponse, error) {
+	journal := &journal.Journal{}
+	if err := journal.GetJournal(s.DB, req.Id); err != nil {
+		return &pb.JournalResponse{Flag: "error", Message: "Resource not found. Please try again"}, nil
+	}
+	if journal.Status == 5 {
+		return nil, status.Errorf(codes.PermissionDenied, "No action taken as journal already rejected.")
+	}
+	journal.Status = req.Status;
+	if err := s.DB.Save(&journal).Error; err != nil {
+		return &pb.JournalResponse{
+			Flag:    "error",
+			Message: "Operation failed, please try again",
+		}, nil
+	}
+
+	return &pb.JournalResponse{
+		Flag:    "success",
+		Message: "success",
+	}, nil
+}
+
 // Create revision
 func (s *RevisionServer) Create(ctx context.Context, req *pb.RevisionRequest) (*pb.RevisionResponse, error) {
 	rev := journal.Revision{}
