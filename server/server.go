@@ -87,9 +87,6 @@ func (s *JournalServer) Approve(ctx context.Context, req *pb.JournalApproveReque
 	if journal.Status == 1 {
 		return nil, status.Errorf(codes.PermissionDenied, "No action taken as journal already approved.")
 	}
-	if journal.Status != 0 {
-		return nil, status.Errorf(codes.PermissionDenied, "Only pending journal that was able to approved.")
-	}
 	journal.Status = req.Status;
 	if err := s.DB.Save(&journal).Error; err != nil {
 		return &pb.JournalResponse{
