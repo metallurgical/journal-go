@@ -12,3 +12,46 @@ $ make build-local # same as above, use in local
 $ make compile # to compile code into executable file
 $ make clean # clean all generated files and executable file 
 ```
+
+## Autostart Script
+Create a service file in `/lib/systemd/system/journalgo.service` and put following command:
+
+```
+[Unit]
+Description=Autorun golang grpc server for journal application to consume
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+TimeoutSec=30
+Restart=always
+RestartSec=3
+# ExecStart=/usr/local/bin/journal-go -env=/path/to/env/file
+ExecStart=/path/to/main/binary -env=/path/to/env/file
+```
+Enable Services:
+```
+sudo systemctl enable journalgo
+```
+
+Start Services:
+```
+sudo systemctl start journalgo
+```
+
+Stop Services:
+```
+sudo systemctl stop journalgo
+```
+
+Restart Services:
+```
+sudo systemctl restart journalgo
+```
+
+Check Services's status:
+```
+sudo systemctl status journalgo
+```
