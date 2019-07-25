@@ -8,9 +8,15 @@ Copy from example. `cp .env.example .env`
 ```bash
 $ go get github.com/metallurgical/journal-go
 $ make # to build services files -> use in server
-$ make build-local # same as above, use in local
+$ make build-local # same as above, use in local # may need to change directory path in Makefile to reflect yours
 $ make compile # to compile code into executable file
 $ make clean # clean all generated files and executable file 
+```
+
+## Global Command
+
+```
+sudo cp $GOPATH/bin/journal-go /usr/local/bin/journal-go
 ```
 
 ## Autostart Script
@@ -28,8 +34,9 @@ DynamicUser=yes
 TimeoutSec=30
 Restart=always
 RestartSec=3
-# ExecStart=/usr/local/bin/journal-go -env=/path/to/env/file
 ExecStart=/path/to/main/binary -env=/path/to/env/file
+# Eg: ExecStart=/usr/local/bin/journal-go -env=/path/to/env/file
+
 ```
 Enable Services:
 ```
