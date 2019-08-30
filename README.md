@@ -23,6 +23,9 @@ sudo cp $GOPATH/bin/journal-go /usr/local/bin/journal-go
 Create a service file in `/lib/systemd/system/journalgo.service` and put following command:
 
 ```
+[Install]
+WantedBy=multi-user.target
+
 [Unit]
 Description=Autorun golang grpc server for journal application to consume
 Wants=network.target
